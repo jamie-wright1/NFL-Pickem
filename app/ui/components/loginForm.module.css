@@ -1,0 +1,108 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card {
+  flex: 1 1 0%;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  padding: 2rem 1.5rem 1rem;
+}
+
+.title {
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+.fields {
+  width: 100%;
+}
+
+.field {
+  margin-top: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.75rem;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.inputWrap {
+  position: relative;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  padding: 9px 1rem 9px 2.5rem;
+  font-size: 0.875rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  color: #111827;
+}
+
+.input::placeholder {
+  color: #6b7280;
+}
+
+.input:focus {
+  outline-color: #2563eb;
+}
+
+.input:focus ~ .icon {
+  color: #111827;
+}
+
+.icon {
+  pointer-events: none;
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  height: 18px;
+  width: 18px;
+  transform: translateY(-50%);
+  color: #6b7280;
+}
+
+.submit {
+  margin-top: 1rem;
+}
+
+.submit > button {
+  width: 100%;
+}
+
+.submitIcon {
+  margin-left: auto;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #f9fafb;
+}
+
+.status {
+  display: flex;
+  height: 2rem;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.errorIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #ef4444;
+}
+
+.errorText {
+  font-size: 0.875rem;
+  color: #ef4444;
+}

@@ -1,0 +1,101 @@
+.game-page .box{
+    width: 30%;
+    height: 85%;
+}
+
+.game-page .img-box{
+    margin-top: 5%;
+    height: 60%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-page .img-box img{
+    height: 70%;
+    max-width: 100%;
+    margin: auto;
+    display: block;
+}
+
+.game-page .left-team{
+    position: absolute;
+    left: 10%;
+    background-color: lightcoral;
+}
+
+.game-page .right-team{
+    position: absolute;
+    right: 10%;
+    background-color: lightgreen;
+}
+
+.game-page .middle-line{
+    background-color: black;
+    width: 1%;
+    position: absolute;
+    left: 49.5%;
+    height: 650px;
+}
+
+.game-page .return-link{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+/*.right-team img{
+    transform: scaleX(-1);
+}*/
+
+.game-page .pick-button{
+    font-size: 3vw;
+    color: black;
+    width: 35%;
+    text-align: center;
+    border: 3px black solid;
+    margin: auto;
+    margin-top: 10%;
+}
+
+.game-page #previous-game{
+    position: absolute;
+    bottom: 3%;
+    left: 0%;
+    height: 10%;
+    width: 10%;
+    text-align: center;
+    margin: 0;
+}
+
+.game-page #left-arrow{
+    height: 75%;
+}
+
+.game-page #next-game{
+    position: absolute;
+    bottom: 3%;
+    right: 0%;
+    height: 10%;
+    width: 10%;
+    text-align: center;
+    margin:0;
+}
+
+.game-page #right-arrow{
+    height: 75%;
+    transform: scaleX(-1);
+}
+
+.game-page .score-box{
+    color: red;
+    position: absolute;
+    bottom: 10%;
+    width: 20%;
+    left: 40%;
+    height: 10%;
+    font-size: 2vw;
+    text-align: center;
+    line-height: 200%;
+}

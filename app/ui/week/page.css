@@ -1,0 +1,128 @@
+.week-page #Header{
+    text-align: center;
+}
+
+
+.week-page .week-box{
+    position: absolute;
+    width: 50%;
+    left: 0;
+    padding-left: 5%;
+}
+
+.week-page .top-bar{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.week-page .leaderboard-container{
+    position: absolute;
+    width: 50%;
+    height: 80%;
+    left: 0;
+    bottom: 0;
+}
+
+.week-page .game-rows{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    gap:2px;
+    width: 50%;
+    right:0;
+    bottom: 0;
+}
+
+.week-page .game-box{
+    margin:auto;
+    width: 100%;
+    height: 20%;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.week-page .pick-screen{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 60%;
+    margin: 0%;
+}
+
+.week-page .game-info{
+    display: flex;
+    justify-content: center;
+    justify-content: space-evenly;
+    height: 20%;
+    font-size: 90%;
+}
+
+.week-page .pick-button{
+    color: black;
+    width: 10%;
+    height: 60%;
+    text-align: center;
+    border: black solid;
+    font-size: 125%;
+}
+
+.week-page .game-score{
+    font-size: 150%;
+}
+
+.week-page .img-box{
+    height: 100%;
+}
+
+
+.week-page .img-box img{
+    height: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+
+/* #home-img-box{
+    transform: scaleX(-1);
+}*/
+
+
+.week-page .game-date-time{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 20%;
+    font-size: 90%;
+}
+
+.week-page .game-boxes{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.week-page .leaderboard-container h1{
+    text-align: center;
+    font-size: 200%;
+    margin-bottom: 10%;
+}
+
+.week-page .leaderboard{
+    font-size: 150%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.week-page .leaderboard p{
+    margin-bottom: 5%;
+    
+}
