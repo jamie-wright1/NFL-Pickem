@@ -1,128 +1,233 @@
-.week-page #Header{
-    text-align: center;
-}
-
-
-.week-page .week-box{
-    position: absolute;
-    width: 50%;
-    left: 0;
-    padding-left: 5%;
-}
-
 .week-page .top-bar{
-    position: absolute;
-    width: 100%;
-    height: 20%;
-    top: 0;
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 3rem;
 }
 
 .week-page .leaderboard-container{
-    position: absolute;
-    width: 50%;
-    height: 80%;
-    left: 0;
-    bottom: 0;
+    min-width: 0;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
 }
 
 .week-page .game-rows{
-    position: absolute;
     display: flex;
     flex-direction: column;
-    height: 80%;
-    gap:2px;
-    width: 50%;
-    right:0;
-    bottom: 0;
+    min-width: 0;
+    gap: 1rem;
+}
+
+.week-page .game-rows > .inline-flex {
+    width: 100%;
+    align-items: center;
+    min-height: 2.5rem;
 }
 
 .week-page .game-box{
-    margin:auto;
-    width: 100%;
-    height: 20%;
-    border-color: black;
-    border-width: 1px;
-    border-style: solid;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface);
+    box-shadow: 0 4px 14px rgba(23, 32, 51, 0.04);
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.week-page .game-box:hover {
+    border-color: #93b4ee;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+.week-page .game-box > a {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
 }
 
 .week-page .pick-screen{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    height: 60%;
-    margin: 0%;
+    gap: 0.75rem;
+    min-height: 5rem;
+    padding: 0 1rem;
 }
 
 .week-page .game-info{
     display: flex;
-    justify-content: center;
-    justify-content: space-evenly;
-    height: 20%;
-    font-size: 90%;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--border);
+    color: #26344d;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.week-page .game-info > a,
+.week-page .game-date-time > a{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.week-page .game-info > a{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0.5rem;
+}
+
+.week-page .game-info h2{
+    min-width: 0;
+    margin: 0;
+}
+
+.week-page .game-info .away-team{
+    text-align: left;
+}
+
+.week-page .game-info .at{
+    text-align: center;
+}
+
+.week-page .game-info .home-team{
+    text-align: right;
+}
+
+.week-page .game-date-time > a{
+    justify-content: space-between;
 }
 
 .week-page .pick-button{
-    color: black;
-    width: 10%;
-    height: 60%;
-    text-align: center;
-    border: black solid;
-    font-size: 125%;
+    min-width: 4.75rem;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid #93b4ee;
+    border-radius: 0.375rem;
+    color: #1d4ed8;
+    background: #eff6ff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .week-page .game-score{
-    font-size: 150%;
+    margin: 0;
+    color: #172033;
+    font-size: 1.125rem;
+    font-weight: 700;
 }
 
 .week-page .img-box{
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
 }
-
 
 .week-page .img-box img{
-    height: 100%;
-    max-width: 100%;
-    position: relative;
+    height: 3.5rem;
+    width: 3.5rem;
+    object-fit: contain;
 }
-
-
-/* #home-img-box{
-    transform: scaleX(-1);
-}*/
 
 
 .week-page .game-date-time{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    height: 20%;
-    font-size: 90%;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.week-page .game-date-time p {
+    margin: 0;
 }
 
 .week-page .game-boxes{
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    height: 100%;
+    gap: 0.625rem;
+    max-height: calc(100vh - 10rem);
     overflow-y: auto;
+    padding: 0.125rem;
 }
 
 .week-page .leaderboard-container h1{
     text-align: center;
-    font-size: 200%;
-    margin-bottom: 10%;
+    margin: 0 0 1.25rem;
+    color: #172033;
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
 .week-page .leaderboard{
-    font-size: 150%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 0.625rem;
 }
 
 .week-page .leaderboard p{
-    margin-bottom: 5%;
-    
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--surface-muted);
+    color: #334155;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .week-page {
+        display: grid;
+        grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 1.4fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 1rem 1.5rem;
+        min-height: 100vh;
+        padding: 1.5rem;
+    }
+
+    .week-page .top-bar {
+        grid-column: 1 / -1;
+    }
+
+    .week-page .leaderboard-container,
+    .week-page .game-rows {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .week-page {
+        padding: 0.75rem;
+    }
+
+    .week-page .leaderboard-container {
+        padding: 1rem;
+    }
+
+    .week-page .game-boxes {
+        max-height: none;
+    }
+
+    .week-page .game-rows > .inline-flex {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
 }

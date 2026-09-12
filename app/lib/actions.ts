@@ -61,10 +61,10 @@ export async function updatePlayerRecord(player: string, pickedCorrectly: boolea
     let [correct, incorrect] = currRecord[0].record.split('-').map(Number);
     if (pickedCorrectly) {
         correct += 1;
-        await sql`UPDATE users SET points = points + 1, record = CONCAT(${correct}, '-', ${incorrect}) WHERE name = ${player}`;
+        await sql`UPDATE users SET points = points + 1, record = ${`${correct}-${incorrect}`} WHERE name = ${player}`;
     } else {
         incorrect += 1;
-        await sql`UPDATE users SET record = CONCAT(${correct}, '-', ${incorrect}) WHERE name = ${player}`;
+        await sql`UPDATE users SET record = ${`${correct}-${incorrect}`} WHERE name = ${player}`;
     }
     
 
@@ -79,7 +79,7 @@ export async function updateUserTeamRecord(player: string, team: string, win: bo
     } else {
         incorrect += 1;
     }
-    await sql`UPDATE user_team_records SET record = CONCAT(${correct}, '-', ${incorrect}) WHERE user = ${player} AND team = ${team}`;
+    await sql`UPDATE user_team_records SET record = ${`${correct}-${incorrect}`} WHERE user = ${player} AND team = ${team}`;
 
     //revalidatePath('/ui/components/leaderboard');
 }
@@ -120,7 +120,7 @@ export async function updateScoring(game: number, score: Score) {
     }
 
     const picks = await transaction`
-      SELECT player, pickedHomeTeam
+      SELECT player, pickedHomeTeam AS "pickedHomeTeam"
       FROM picks
       WHERE game = ${game}
     `;
@@ -148,7 +148,7 @@ export async function updateScoring(game: number, score: Score) {
       await transaction`
         UPDATE users
         SET points = points + ${pickedCorrectly ? 1 : 0},
-            record = CONCAT(${correct}, '-', ${incorrect})
+            record = ${`${correct}-${incorrect}`}
         WHERE name = ${pick.player}
       `;
     }
@@ -167,5 +167,8 @@ export async function updateScoring(game: number, score: Score) {
 
   if (scored) {
     revalidatePath('/ui/week');
+    return true;
+  } else {
+    return false;
   }
 }

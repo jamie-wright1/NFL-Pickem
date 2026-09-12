@@ -12,20 +12,34 @@ const sql = postgres(process.env.POSTGRES_URL!, {
 
 
 export default async function runScoring() {
-    const games = await sql`SELECT game_id, is_scored from games`
+    try{
+        const games = await sql`
+            SELECT game_id, is_scored
+            FROM games
+            WHERE is_scored = false
+                AND (date + time) <= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+            `;
 
-    const processedGames: number[] = [];
-    const skippedGames: number[] = [];
+        const processedGames: number[] = [];
+        const skippedGames: number[] = [];
 
-    for (const game of games) {
-        if (!game.is_scored && await CheckGameFinished(game.game_id)) {
-            const score: Score = await FetchFinalScore(game.game_id);
-            await updateScoring(game.game_id, score);
-            processedGames.push(game.game_id);
-        } else {
-            skippedGames.push(game.game_id);
+        for (const game of games) {
+            if (!game.is_scored && await CheckGameFinished(game.game_id)) {
+                const score: Score = await FetchFinalScore(game.game_id);
+                const updated = await updateScoring(game.game_id, score);
+                if (updated) {
+                    processedGames.push(game.game_id);
+                } else {
+                    skippedGames.push(game.game_id);
+                }
+            } else {
+                skippedGames.push(game.game_id);
+            }
         }
-    }
 
-    return { processed: processedGames, skipped: skippedGames };
+        return { processed: processedGames, skipped: skippedGames };
+    } catch (error) {
+        console.error("Error during scoring process:", error);
+        throw new Error("Scoring process failed.");
+    }
 }

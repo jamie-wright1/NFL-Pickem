@@ -3,17 +3,20 @@
 import { PickGameProps } from "../../lib/definitions";
 import { storePick } from "../../lib/actions";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 export default function PickGame({ game_id, isHomeTeam, buttonPicked, isLocked }: PickGameProps) {
+    const router = useRouter();
     const className = clsx("pick-button", {
-        "bg-gray-300 cursor-not-allowed": isLocked || buttonPicked,
-        "bg-yellow-500": !isLocked && !buttonPicked,
+        "is-closed": isLocked,
+        "is-picked": !isLocked && buttonPicked,
     });
 
     const text = isLocked ? "Closed" : buttonPicked ? "Picked" : "Pick";
 
-    const handlePick = ({ game_id, isHomeTeam }: PickGameProps) => {
-        void storePick({ game: game_id, pickedHomeTeam: isHomeTeam });
+    const handlePick = async ({ game_id, isHomeTeam }: PickGameProps) => {
+        await storePick({ game: game_id, pickedHomeTeam: isHomeTeam });
+        router.refresh();
     }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,7 +25,7 @@ export default function PickGame({ game_id, isHomeTeam, buttonPicked, isLocked }
         if (isLocked || buttonPicked) {
             return;
         }
-        handlePick({ game_id: game_id, isHomeTeam: isHomeTeam, buttonPicked: buttonPicked, isLocked: isLocked });
+        void handlePick({ game_id, isHomeTeam, buttonPicked, isLocked });
     };
     
 

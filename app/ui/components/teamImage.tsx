@@ -39,5 +39,16 @@ export default function TeamImage({ team }: TeamImageProps) {
         // Add more teams and their corresponding image paths here
     }
 
-    return <img className="team-image" src={teamImages[team] || '/Icons/default.png'} alt={team} />;
+    const imagePath = teamImages[team.trim()]
+        ?? Object.entries(teamImages).find(([name]) => name.toLowerCase() === team.trim().toLowerCase())?.[1];
+
+    return (
+        <Image
+            className="team-image"
+            src={imagePath || '/Icons/Teams/Seahawks.png'}
+            alt={`${team} logo`}
+            width={56}
+            height={56}
+        />
+    );
 }

@@ -30,3 +30,12 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const isGameClosed = (date: string | Date, time: string) => {
+  const datePart = date instanceof Date
+    ? date.toISOString().slice(0, 10)
+    : date.slice(0, 10);
+  const deadline = new Date(`${datePart}T${time}Z`);
+
+  return !Number.isFinite(deadline.getTime()) || deadline <= new Date();
+};

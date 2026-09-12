@@ -1,47 +1,59 @@
+.game-page{
+    min-height: 100vh;
+    padding: 4.5rem 1.5rem 2rem;
+    background: var(--background);
+}
+
 .game-page .box{
-    width: 30%;
-    height: 85%;
+    min-width: 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface);
+    box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
 }
 
 .game-page .img-box{
-    margin-top: 5%;
-    height: 60%;
+    min-height: 15rem;
     justify-content: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .game-page .img-box img{
-    height: 70%;
-    max-width: 100%;
-    margin: auto;
-    display: block;
+    width: min(70%, 15rem);
+    height: auto;
+    object-fit: contain;
 }
 
 .game-page .left-team{
-    position: absolute;
-    left: 10%;
-    background-color: lightcoral;
+    grid-area: away;
 }
 
 .game-page .right-team{
-    position: absolute;
-    right: 10%;
-    background-color: lightgreen;
+    grid-area: home;
 }
 
 .game-page .middle-line{
-    background-color: black;
-    width: 1%;
-    position: absolute;
-    left: 49.5%;
-    height: 650px;
+    grid-area: versus;
+    align-self: center;
+    width: 1px;
+    height: 70%;
+    background-color: var(--border);
 }
 
 .game-page .return-link{
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 1rem;
+    left: 1.5rem;
+    border-radius: 0.375rem;
+    background: var(--blue);
+    color: white;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 
@@ -50,13 +62,30 @@
 }*/
 
 .game-page .pick-button{
-    font-size: 3vw;
-    color: black;
-    width: 35%;
+    min-width: 7rem;
+    min-height: 2.75rem;
+    margin-top: 1.5rem;
+    padding: 0.625rem 1rem;
+    border: 1px solid #93b4ee;
+    border-radius: 0.375rem;
+    color: #1d4ed8;
+    background: #eff6ff;
+    font-size: 0.875rem;
+    font-weight: 600;
     text-align: center;
-    border: 3px black solid;
-    margin: auto;
-    margin-top: 10%;
+    cursor: pointer;
+}
+
+.game-page .pick-button.is-picked,
+.game-page .pick-button.is-closed {
+    border-color: #cbd5e1;
+    color: #475569;
+    background: #e2e8f0;
+    cursor: not-allowed;
+}
+
+.game-page .pick-button:disabled {
+    opacity: 1;
 }
 
 .game-page #previous-game{
@@ -89,13 +118,61 @@
 }
 
 .game-page .score-box{
-    color: red;
-    position: absolute;
-    bottom: 10%;
-    width: 20%;
-    left: 40%;
-    height: 10%;
-    font-size: 2vw;
+    color: var(--muted);
+    font-size: 1rem;
     text-align: center;
-    line-height: 200%;
+}
+
+.game-page .game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 68rem;
+    margin: 0 auto 1.5rem;
+    color: #26344d;
+}
+
+.game-page .game-info h1 {
+    margin: 0;
+    font-size: clamp(1.25rem, 3vw, 2rem);
+}
+
+.game-page .pick-screen {
+    display: grid;
+    grid-template-areas: "away versus home";
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    max-width: 68rem;
+    min-height: 24rem;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+@media (max-width: 640px) {
+    .game-page {
+        padding: 4rem 0.75rem 1.5rem;
+    }
+
+    .game-page .return-link {
+        left: 0.75rem;
+    }
+
+    .game-page .pick-screen {
+        grid-template-areas:
+            "away"
+            "versus"
+            "home";
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .game-page .middle-line {
+        width: 50%;
+        height: 1px;
+        justify-self: center;
+    }
+
+    .game-page .img-box {
+        min-height: 12rem;
+    }
 }

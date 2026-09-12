@@ -9,7 +9,7 @@ export default function LoginPage() {
         <div className={styles.banner}>
           <div className={styles.bannerInner}>
             <h1 className={styles.title}>
-              NFL Pick'em
+              NFL Pick&apos;em
             </h1>
           </div>
         </div>

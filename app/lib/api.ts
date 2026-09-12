@@ -10,7 +10,7 @@ function parseApiDateTime(dateTime: string) {
 
 
 export async function FetchGames(week: number) {
-  const response = await fetch('http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/weeks/' + week.toString() + '/events');
+  const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/weeks/' + week.toString() + '/events');
   const events = await response.json();
   
   const gameData: Game[] = [];
@@ -111,10 +111,10 @@ export async function FetchTeam(teamName: string) {
     'Houston Texans': 34
   };
 
-  const response = await fetch('http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/' + IdNamesFromTeamNames[teamName]);
+  const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/' + IdNamesFromTeamNames[teamName]);
   const teamData = await response.json();
 
-  const recordResponse = await fetch('http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/teams/' + IdNamesFromTeamNames[teamName] + '/record');
+  const recordResponse = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/teams/' + IdNamesFromTeamNames[teamName] + '/record');
   const recordData = await recordResponse.json();
 
   const teamInfo: Team = {
@@ -144,7 +144,7 @@ export async function FetchGameInfo(week: number) {
 }
 
 export async function CheckGameFinished(gameId: number) {
-  const gameStatus = await fetch('http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/' + gameId + '/competitions/' + gameId + '/status?lang=en&region=us')
+  const gameStatus = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/' + gameId + '/competitions/' + gameId + '/status?lang=en&region=us')
   const gameStatusData = await gameStatus.json();
   const gameFinished = gameStatusData.type.completed;
 
@@ -152,7 +152,7 @@ export async function CheckGameFinished(gameId: number) {
 }
 
 export async function FetchFinalScore(game: number) {
-  const response = await fetch('http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/' + game);
+  const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/' + game);
   const gameData = await response.json();
   
   

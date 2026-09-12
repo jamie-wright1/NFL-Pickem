@@ -7,6 +7,7 @@ import { fetchGameById } from "../../../lib/data";
 import '../page.css';
 import { auth } from "@/auth";
 import { fetchButtonPicked } from "../../../lib/data";
+import { isGameClosed } from "../../../lib/utils";
 
 type GameDetailPageProps = {
     params?: Promise<{
@@ -37,7 +38,7 @@ export default async function Index({ params }: GameDetailPageProps) {
         notFound();
     }
 
-    const isLocked = new Date(`${game.date}T${game.time}Z`) <= new Date();
+    const isLocked = isGameClosed(game.date, game.time);
 
     return (
         <main className="game-page">
