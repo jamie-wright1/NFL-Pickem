@@ -74,25 +74,57 @@ export async function fetchButtonPicked(game_id: number, player: string) {
     }
 }
 
-export async function fetchButtonPickedForGames(gameIds: number[], player: string) {
+export async function fetchPicksForGames(gameIds: number[], requestingPlayer: string) {
     if (gameIds.length === 0) {
-        return new Map<number, PickSide>();
+        return new Map<number, PickSide[]>();
     }
 
     try {
         const picks: Pick[] = await sql`
-            SELECT game, pickedhometeam AS "pickedHomeTeam"
+            SELECT game, player, pickedhometeam AS "pickedHomeTeam"
             FROM picks
-            WHERE player = ${player}
-              AND game IN ${sql(gameIds)}
+            WHERE game IN ${sql(gameIds)}
+            ORDER BY game, (player = ${requestingPlayer}) DESC, player
         `;
 
-        return new Map<number, PickSide>(
-            picks.map((pick) => [pick.game, pick.pickedHomeTeam ? 'home' : 'away'])
-        );
+        const picksByGame = new Map<number, PickSide[]>();
+
+        for (const pick of picks) {
+            const gamePicks = picksByGame.get(pick.game) ?? [];
+
+            gamePicks.push({
+                player: pick.player,
+                picked: pick.pickedHomeTeam === true ? "home" : pick.pickedHomeTeam === false ? "away" : null,
+            });
+
+            picksByGame.set(pick.game, gamePicks);
+        }
+
+        return picksByGame;
     }
     catch (error) {
         console.error("Database error:", error);
         throw new Error("Error fetching picked button states");
+    }
+}
+
+export async function getPicks(game_id: number) {
+    const picks = await sql`SELECT * from picks WHERE game_id = ${game_id}`;
+    return picks;
+}
+
+export async function fetchActiveWeek(): Promise<number | null> {
+    try {
+        const rows = await sql<{ week: number | null }[]>`
+            SELECT MIN(week) AS week
+            FROM games
+            WHERE is_scored IS NOT TRUE
+        `;
+
+        return rows[0]?.week ?? null;
+    }
+    catch (error) {
+        console.error("Database error:", error);
+        throw new Error("Error fetching active week");
     }
 }

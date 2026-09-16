@@ -56,7 +56,38 @@
     align-items: center;
     gap: 0.75rem;
     min-height: 5rem;
+    padding: 0;
+}
+
+.week-page .team-side{
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    align-self: stretch;
+    gap: 0.5rem;
+    min-width: 0;
     padding: 0 1rem;
+    border-radius: 0.375rem;
+}
+
+.week-page .team-side:first-child{
+    justify-content: space-between;
+}
+
+.week-page .team-side:last-child{
+    justify-content: space-between;
+}
+
+.week-page .team-side.picked-correct{
+    background: #dcfce7;
+}
+
+.week-page .team-side.picked-incorrect{
+    background: #fee2e2;
+}
+
+.week-page .team-side.picked-pending{
+    background: #fef3c7;
 }
 
 .week-page .game-info{
@@ -86,6 +117,16 @@
     gap: 0.5rem;
 }
 
+.middle-line{
+    grid-area: versus;
+    align-self: center;
+    width: 2px;
+    height: 35px;
+    background-color: var(--border);
+    justify-self: center;
+}
+
+
 .week-page .game-info h2{
     min-width: 0;
     margin: 0;
@@ -104,7 +145,82 @@
 }
 
 .week-page .game-date-time > a{
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 2px minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    justify-content: initial;
+}
+
+.week-page .team-pickers{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+    max-width: 38%;
+}
+
+.week-page .team-pickers span{
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.week-page .away-pickers span{
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.week-page .home-pickers span{
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.week-page .team-pickers span.picker-correct{
+    border-color: #86efac;
+    color: #166534;
+    background: #dcfce7;
+}
+
+.week-page .team-pickers span.picker-incorrect{
+    border-color: #fca5a5;
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.week-page .team-pickers span.picker-pending{
+    border-color: #fcd34d;
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.week-page .away-pickers{
+    grid-column: 2;
+    justify-content: flex-start;
+}
+
+.week-page .home-pickers{
+    grid-column: 4;
+    justify-content: flex-end;
+}
+
+.week-page .game-date-time .middle-line{
+    grid-column: 3;
+    grid-row: 1;
+    width: 2px;
+    height: 35px;
 }
 
 .week-page .pick-button{
@@ -155,6 +271,20 @@
 
 .week-page .game-date-time p {
     margin: 0;
+}
+
+.week-page .game-date-time .game-date,
+.week-page .game-date-time .game-time{
+    flex: 0 0 auto;
+    font-weight: 600;
+}
+
+.week-page .game-date-time .game-date{
+    grid-column: 1;
+}
+
+.week-page .game-date-time .game-time{
+    grid-column: 5;
 }
 
 .week-page .game-boxes{
@@ -229,5 +359,15 @@
     .week-page .game-rows > .inline-flex {
         overflow-x: auto;
         justify-content: flex-start;
+    }
+}
+
+@media (max-width: 767px) {
+    .week-page .team-pickers{
+        max-width: 50%;
+    }
+
+    .week-page .team-pickers span{
+        max-width: 7rem;
     }
 }

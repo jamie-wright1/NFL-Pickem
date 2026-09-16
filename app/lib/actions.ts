@@ -34,10 +34,18 @@ export async function storePick(pick: { game: number; pickedHomeTeam: boolean })
 
     await sql.begin(async (transaction) => {
       const openGame = await transaction`
-        SELECT game_id
-        FROM games
-        WHERE game_id = ${game}
-          AND (date + time) > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+        WITH active_week AS (
+          SELECT MIN(week) AS week
+          FROM games
+          WHERE is_scored IS NOT TRUE
+        )
+        SELECT g.game_id
+        FROM games AS g
+        CROSS JOIN active_week AS aw
+        WHERE g.game_id = ${game}
+          AND g.week = aw.week
+          AND g.is_scored IS NOT TRUE
+          AND (g.date + g.time) > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
         FOR UPDATE
       `;
 

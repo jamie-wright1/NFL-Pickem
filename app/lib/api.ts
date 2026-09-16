@@ -1,19 +1,15 @@
 import { Team, Game } from "./definitions";
-import { teams } from './initial-data';
+import { teams } from "./initial-data";
 
-function parseApiDateTime(dateTime: string) {
-  const [date, rawTime] = dateTime.split("T");
-  const time = rawTime.replace("Z", "").split(".")[0];
-
-  return { date, time };
-}
-
+type ApiGame = Omit<Game, "is_scored"> & {
+    is_scored: boolean;
+};
 
 export async function FetchGames(week: number) {
   const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/weeks/' + week.toString() + '/events');
   const events = await response.json();
   
-  const gameData: Game[] = [];
+  const gameData: ApiGame[] = [];
 
   const teamNamesFromId: { [key: number]: string } = {
         1: 'Atlanta Falcons',
@@ -68,7 +64,8 @@ export async function FetchGames(week: number) {
       home_score: homeScore.value,
       week,
       date,
-      time
+      time,
+      is_scored: event.status.type.completed,
     });
   }
 
@@ -131,7 +128,6 @@ export async function FetchTeam(teamName: string) {
 export async function FetchGameInfo(week: number) {
   const gameData = await FetchGames(week);
   
-
   const gameInfo: { gameId: string; awayTeam: string; awayRecord: string; homeTeam: string; homeRecord: string; awayScore: number, homeScore: number }[] = [];
 
   for (const game of gameData) {
@@ -163,4 +159,32 @@ export async function FetchFinalScore(game: number) {
 
   const score = {home_score: homeScore.value, away_score: awayScore.value};
   return score;
+}
+
+export async function FetchGameRows(week: number) {
+  const gameData = await FetchGames(week);
+  
+  return gameData.map((game) => ({
+    game_id: game.game_id,
+    away_team: game.away_team,
+    away_score: game.away_score,
+    home_team: game.home_team,
+    home_score: game.home_score,
+    week: game.week,
+    date: game.date,
+    time: game.time,
+    is_scored: game.is_scored,
+  }));
+}
+
+function parseApiDateTime(dateTime: string): {
+    date: string;
+    time: string;
+} {
+    const date = new Date(dateTime);
+
+    return {
+        date: date.toISOString().slice(0, 10),
+        time: date.toISOString().slice(11, 19),
+    };
 }

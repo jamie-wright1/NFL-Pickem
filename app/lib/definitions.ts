@@ -1,6 +1,6 @@
 // This file contains type definitions for data.
 
-export type PickSide = 'home' | 'away';
+export type PickSide = {player: string, picked: 'home' | 'away' | null};
 
 export type GameRowsProps = {
     game_id: number;
@@ -8,11 +8,26 @@ export type GameRowsProps = {
     away_score: number;
     home_team: string;
     home_score: number;
+    is_scored: boolean;
     week: number;
     date: string | Date;
     time: string;
-    pick: PickSide | null;
+    picks: PickSide[] | null;
+    requestingPlayer: string;
+    activeWeek: number | null;
 };
+
+export type GameBoxTeamProps = {
+    game_id: number;
+    team: string;
+    score: number;
+    isHome: boolean;
+    week: number;
+    date: string | Date;
+    time: string;
+    picks: PickSide[] | null;
+    requestingPlayer: string;
+}
 
 export type GamePageProps = {
     searchParams?: Promise<{
@@ -60,6 +75,7 @@ export type Game = {
     away_score: number;
     home_team: string;
     home_score: number;
+    is_scored: boolean;
     week: number;
     date: string;
     time: string;
