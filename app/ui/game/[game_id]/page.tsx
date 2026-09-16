@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import PickGame from "../../components/pickGame";
 import TeamImage from "../../components/teamImage";
-import { fetchGameById } from "../../../lib/data";
+import { fetchActiveWeek, fetchGameById } from "../../../lib/data";
 import '../page.css';
 import { auth } from "@/auth";
 import { fetchButtonPicked } from "../../../lib/data";
@@ -16,6 +16,7 @@ type GameDetailPageProps = {
 };
 
 export default async function Index({ params }: GameDetailPageProps) {
+        
     const resolvedParams = params ? await params : undefined;
     const parsedID = resolvedParams?.game_id ? Number(resolvedParams.game_id) : NaN;
 
@@ -38,11 +39,12 @@ export default async function Index({ params }: GameDetailPageProps) {
         notFound();
     }
 
-    const isLocked = isGameClosed(game.date, game.time);
+    const activeWeek = await fetchActiveWeek();
+    const isLocked = activeWeek !== game.week || isGameClosed(game.date, game.time);
 
     return (
         <main className="game-page">
-            <Link className="return-link bg-blue-500 text-white p-2 rounded" href="/ui/week">Return</Link>
+            <Link className="return-link bg-blue-500 text-white p-2 rounded" href={`/ui/week/${game.week}`}>Return</Link>
             <div className="game-info">
                 <h1 id="away-team">{game.away_team}</h1>
                 <h1 id="at">@</h1>

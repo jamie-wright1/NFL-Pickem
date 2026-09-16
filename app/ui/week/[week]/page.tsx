@@ -3,6 +3,8 @@ import Leaderboard from "../../components/leaderboard";
 import GameRows from "../../components/gameRows";
 import "../page.css";
 import { signOut } from "../../../../auth";
+import { fetchActiveWeek } from "@/app/lib/data";
+import { notFound } from "next/navigation";
 
 type WeekPageProps = {
   params?: Promise<{
@@ -13,9 +15,18 @@ type WeekPageProps = {
 export default async function WeekPage({ params }: WeekPageProps) {
   const resolvedParams = params ? await params : undefined;
   const requestedWeek = Number(resolvedParams?.week);
-  const week = Number.isInteger(requestedWeek) && requestedWeek >= 1 && requestedWeek <= 18
-    ? requestedWeek
-    : 1;
+  let currWeek = await fetchActiveWeek();
+
+  if (currWeek === null) {
+    currWeek = 1; // Default to week 1 if fetchActiveWeek returns null
+  }
+
+  const week =
+    Number.isInteger(requestedWeek) &&
+    requestedWeek >= 1 &&
+    requestedWeek <= 18
+      ? requestedWeek
+      : currWeek;
 
   return (
     <main className="week-page">

@@ -14,7 +14,7 @@ import styles from './loginForm.module.css';
  
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || '/ui/week';
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
