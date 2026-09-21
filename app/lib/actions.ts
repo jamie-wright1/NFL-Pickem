@@ -111,7 +111,7 @@ export async function authenticate(
   }
 }
 
-export async function updateScoring(game: number, score: Score) {
+export async function updateScoring(game: number, score: Score, gameCompleted: boolean) {
   const homeTeamWon = score.home_score > score.away_score;
 
   const scored = await sql.begin(async (transaction) => {
@@ -133,39 +133,41 @@ export async function updateScoring(game: number, score: Score) {
       WHERE game = ${game}
     `;
 
-    for (const pick of picks) {
-      const pickedCorrectly = pick.pickedHomeTeam === homeTeamWon;
-      const users = await transaction`
-        SELECT record
-        FROM users
-        WHERE name = ${pick.player}
-        FOR UPDATE
-      `;
+    if (gameCompleted) {
+      for (const pick of picks) {
+        const pickedCorrectly = pick.pickedHomeTeam === homeTeamWon;
+        const users = await transaction`
+          SELECT record
+          FROM users
+          WHERE name = ${pick.player}
+          FOR UPDATE
+        `;
 
-      if (users.length === 0) {
-        throw new Error(`User not found while scoring game ${game}`);
+        if (users.length === 0) {
+          throw new Error(`User not found while scoring game ${game}`);
+        }
+
+        let [correct, incorrect] = users[0].record.split('-').map(Number);
+        if (pickedCorrectly) {
+          correct += 1;
+        } else {
+          incorrect += 1;
+        }
+
+        await transaction`
+          UPDATE users
+          SET points = points + ${pickedCorrectly ? 1 : 0},
+              record = ${`${correct}-${incorrect}`}
+          WHERE name = ${pick.player}
+        `;
       }
-
-      let [correct, incorrect] = users[0].record.split('-').map(Number);
-      if (pickedCorrectly) {
-        correct += 1;
-      } else {
-        incorrect += 1;
-      }
-
-      await transaction`
-        UPDATE users
-        SET points = points + ${pickedCorrectly ? 1 : 0},
-            record = ${`${correct}-${incorrect}`}
-        WHERE name = ${pick.player}
-      `;
     }
 
     await transaction`
       UPDATE games
       SET home_score = ${score.home_score},
           away_score = ${score.away_score},
-          is_scored = true
+          is_scored = ${gameCompleted}
       WHERE game_id = ${game}
         AND is_scored = false
     `;

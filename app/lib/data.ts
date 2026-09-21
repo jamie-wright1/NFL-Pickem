@@ -22,7 +22,8 @@ export async function fetchTeams() {
 
 export async function fetchGames(week: number = 1) {
     try {
-        const games: Game[] = await sql`SELECT * FROM games WHERE week = ${week}`;
+        const games: Game[] = await sql`SELECT * FROM games WHERE week = ${week}
+ORDER BY is_scored ASC, date ASC, time ASC`;
         return games;
     }
     catch (error) {

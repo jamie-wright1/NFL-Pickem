@@ -24,9 +24,11 @@ export default async function runScoring() {
         const skippedGames: number[] = [];
 
         for (const game of games) {
-            if (!game.is_scored && await CheckGameFinished(game.game_id)) {
+            const gameCompleted = await CheckGameFinished(game.game_id);
+
+            if (!game.is_scored) {
                 const score: Score = await FetchFinalScore(game.game_id);
-                const updated = await updateScoring(game.game_id, score);
+                const updated = await updateScoring(game.game_id, score, gameCompleted);
                 if (updated) {
                     processedGames.push(game.game_id);
                 } else {
