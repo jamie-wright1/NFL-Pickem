@@ -55,7 +55,7 @@ export default async function Index({ params }: GameDetailPageProps) {
                 <div className="box left-team">
                     <div className="img-box">
                         <TeamImage team={game.away_team} />
-                        <PickGame game_id={game.game_id} isHomeTeam={false} buttonPicked={pick === "away"} isLocked={isLocked} />
+                        <PickGame game_id={game.game_id} isHomeTeam={false} buttonPicked={pick === "away"} isLocked={isLocked} odds={game.away_odds} />
                     </div>
                 </div>
 
@@ -63,7 +63,7 @@ export default async function Index({ params }: GameDetailPageProps) {
                 <div className="box right-team">
                     <div className="img-box">
                         <TeamImage team={game.home_team} />
-                        <PickGame game_id={game.game_id} isHomeTeam={true} buttonPicked={pick === "home"} isLocked={isLocked} />
+                        <PickGame game_id={game.game_id} isHomeTeam={true} buttonPicked={pick === "home"} isLocked={isLocked} odds={game.home_odds} />
                     </div>
                 </div>
             </div>
