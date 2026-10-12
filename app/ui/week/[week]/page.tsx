@@ -38,12 +38,12 @@ export default async function WeekPage({ params }: WeekPageProps) {
             }}
             >
             <button className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-                <div className="hidden md:block bg-blue-500 text-white p-2 rounded">Sign Out</div>
+                <div className="bg-blue-500 text-white p-2 rounded">Sign Out</div>
             </button>
         </form>
       </div>
       <Leaderboard />
-      <GameRows week={week} />
+      <GameRows week={week} activeWeek={currWeek} />
     </main>
   );
 }

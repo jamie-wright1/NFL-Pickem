@@ -1,4 +1,4 @@
-import { Team, Game } from "./definitions";
+import { Team, Game, IdNamesFromTeamNames } from "./definitions";
 import { teams } from "./initial-data";
 
 type ApiGame = Omit<Game, "is_scored"> & {
@@ -53,6 +53,17 @@ export async function FetchGames(week: number) {
     const homeScore = await homeScoreData.json();
     const awayScoreData = await fetch(eventDetails["competitions"][0]["competitors"][1]["score"].$ref);
     const awayScore = await awayScoreData.json();
+    const oddsResponse = await fetch("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/" + eventDetails.id + "/competitions/" + eventDetails.id + "/odds?lang=en&region=us");
+    const oddsData = await oddsResponse.json();
+
+    const odds = oddsData?.items?.[0];
+    const awayOdds = odds?.awayTeamOdds?.moneyLine;
+    const homeOdds = odds?.homeTeamOdds?.moneyLine;
+
+    if (!Number.isInteger(awayOdds) || !Number.isInteger(homeOdds)) {
+        console.warn(`Skipping event ${eventDetails.id}: moneyline odds are unavailable`);
+        continue;
+    }
 
     const { date, time } = parseApiDateTime(eventDetails.date);
 
@@ -66,6 +77,8 @@ export async function FetchGames(week: number) {
       date,
       time,
       is_scored: event.status.type.completed,
+      away_odds: oddsData["items"][0]["awayTeamOdds"],
+      home_odds: oddsData["items"][0]["homeTeamOdds"],
     });
   }
 
@@ -73,40 +86,6 @@ export async function FetchGames(week: number) {
 }   
 
 export async function FetchTeam(teamName: string) {
-  const IdNamesFromTeamNames: { [key: string]: number } = {
-    'Atlanta Falcons': 1,
-    'Buffalo Bills': 2,
-    'Chicago Bears': 3,
-    'Cincinnati Bengals': 4,
-    'Cleveland Browns': 5,
-    'Dallas Cowboys': 6,
-    'Denver Broncos': 7,
-    'Detroit Lions': 8,
-    'Green Bay Packers': 9,
-    'Tennessee Titans': 10,
-    'Indianapolis Colts': 11,
-    'Kansas City Chiefs': 12,
-    'Las Vegas Raiders': 13,
-    'Los Angeles Rams': 14,
-    'Miami Dolphins': 15,
-    'Minnesota Vikings': 16,
-    'New England Patriots': 17,
-    'New Orleans Saints': 18,
-    'New York Giants': 19,
-    'New York Jets': 20,
-    'Philadelphia Eagles': 21,
-    'Arizona Cardinals': 22,
-    'Pittsburgh Steelers': 23,
-    'Los Angeles Chargers': 24,
-    'San Francisco 49ers': 25,
-    'Seattle Seahawks': 26,
-    'Tampa Bay Buccaneers': 27,
-    'Washington Commanders': 28,
-    'Carolina Panthers': 29,
-    'Jacksonville Jaguars': 30,
-    'Baltimore Ravens': 33,
-    'Houston Texans': 34
-  };
 
   const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/' + IdNamesFromTeamNames[teamName]);
   const teamData = await response.json();
@@ -176,6 +155,30 @@ export async function FetchGameRows(week: number) {
     is_scored: game.is_scored,
   }));
 }
+
+export type TeamRecord = {
+  team: string;
+  record: string;
+};
+
+export async function FetchTeamRecords(): Promise<TeamRecord[]> {
+  const teamRecords: TeamRecord[] = [];
+  
+  for (const team of teams) {
+    const recordResponse = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/teams/' + IdNamesFromTeamNames[team] + '/record');
+    const recordData = await recordResponse.json();
+    const record = recordData.items?.[0]?.summary;
+
+    if (typeof record !== 'string') {
+      throw new Error(`Team record unavailable for ${team}`);
+    }
+
+    teamRecords.push({ team, record });
+  }
+  
+  return teamRecords;
+}
+
 
 function parseApiDateTime(dateTime: string): {
     date: string;

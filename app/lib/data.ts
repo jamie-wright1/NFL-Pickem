@@ -22,8 +22,22 @@ export async function fetchTeams() {
 
 export async function fetchGames(week: number = 1) {
     try {
-        const games: Game[] = await sql`SELECT * FROM games WHERE week = ${week}
-ORDER BY is_scored ASC, date ASC, time ASC`;
+        const games: (Game & {
+            away_record: string | null;
+            home_record: string | null;
+        })[] = await sql`
+            SELECT
+                g.*,
+                away_team.record AS away_record,
+                home_team.record AS home_record
+            FROM games AS g
+            LEFT JOIN teams AS away_team
+                ON away_team.display_name = g.away_team
+            LEFT JOIN teams AS home_team
+                ON home_team.display_name = g.home_team
+            WHERE g.week = ${week}
+            ORDER BY g.is_scored ASC, g.date ASC, g.time ASC
+        `;
         return games;
     }
     catch (error) {
@@ -127,5 +141,20 @@ export async function fetchActiveWeek(): Promise<number | null> {
     catch (error) {
         console.error("Database error:", error);
         throw new Error("Error fetching active week");
+    }
+}
+
+export async function fetchTeamRecord(teamName: string): Promise<string | null> {
+    try {
+        const rows = await sql<UserTeamRecord[]>`
+            SELECT display_name, record
+            FROM teams
+            WHERE display_name = ${teamName}
+        `;
+        return rows[0]?.record ?? null;
+    }
+    catch (error) {
+        console.error("Database error:", error);
+        throw new Error("Error fetching team record");
     }
 }

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { generatePagination } from '@/app/lib/utils';
 
 
@@ -102,18 +103,15 @@ function PaginationArrow({href, direction, isDisabled}: {href: string, direction
         },
     );
 
-    const icon =
-        direction === 'left' ? (
-            <Image src="https://www.svgrepo.com/show/156296/left-arrow-hand-drawn-outline.svg" alt="Left Arrow" width={20} height={20} />) 
-        : (
-            <Image src="https://www.svgrepo.com/show/156296/left-arrow-hand-drawn-outline.svg" alt="Right Arrow" width={20} height={20} />
-        );
+    const icon = direction === 'left'
+      ? <ArrowLeftIcon aria-hidden="true" className="h-5 w-5" />
+      : <ArrowRightIcon aria-hidden="true" className="h-5 w-5 rotate-180" />;
 
 
     return isDisabled ? (
-        <div className={className}>{icon}</div>
+        <div className={className} aria-label={`${direction} page unavailable`}>{icon}</div>
     ) : (
-        <Link className={className} href={href}>
+        <Link className={className} href={href} aria-label={`Go to ${direction} page`}>
         {icon}
         </Link>
     );

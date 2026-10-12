@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import runScoring from "@/app/lib/scoring";
+import { updateTeamRecordsFromAPI } from "@/app/lib/actions";
 
 
 export async function GET(request: NextRequest) {
@@ -11,6 +12,7 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await runScoring();
+  const recordsResult = await updateTeamRecordsFromAPI();
 
   return NextResponse.json(result);
 

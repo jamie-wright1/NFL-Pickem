@@ -5,7 +5,8 @@ import { revalidatePath } from 'next/cache';
 import postgres from 'postgres';
 import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import { Score } from '@/app/lib/definitions'
+import { Score, GameOutcome } from '@/app/lib/definitions'
+import { FetchTeamRecords } from '@/app/lib/api'
  
 const sql = postgres(process.env.POSTGRES_URL!, {
   ssl: 'require',
@@ -112,7 +113,7 @@ export async function authenticate(
 }
 
 export async function updateScoring(game: number, score: Score, gameCompleted: boolean) {
-  const homeTeamWon = score.home_score > score.away_score;
+  const gameResult = getGameResult(score.home_score, score.away_score);
 
   const scored = await sql.begin(async (transaction) => {
     const games = await transaction`
@@ -134,10 +135,15 @@ export async function updateScoring(game: number, score: Score, gameCompleted: b
     `;
 
     if (gameCompleted) {
-      for (const pick of picks) {
-        const pickedCorrectly = pick.pickedHomeTeam === homeTeamWon;
-        const users = await transaction`
-          SELECT record
+      if (gameResult !== "tie") {
+        for (const pick of picks) {
+          const pickedHome = pick.pickedHomeTeam === true;
+          const pickedCorrectly =
+            (gameResult === "home" && pickedHome) ||
+            (gameResult === "away" && !pickedHome);
+            
+          const users = await transaction`
+            SELECT record
           FROM users
           WHERE name = ${pick.player}
           FOR UPDATE
@@ -162,6 +168,7 @@ export async function updateScoring(game: number, score: Score, gameCompleted: b
         `;
       }
     }
+  }
 
     await transaction`
       UPDATE games
@@ -182,3 +189,31 @@ export async function updateScoring(game: number, score: Score, gameCompleted: b
     return false;
   }
 }
+
+export async function updateTeamRecordsFromAPI() {
+  const records = await FetchTeamRecords();
+
+  for (const record of records) {
+    await sql`
+      UPDATE teams
+      SET record = ${record.record}
+      WHERE display_name = ${record.team}
+    `;
+  }
+}
+
+function getGameResult(homeScore: number, awayScore: number): GameOutcome {
+  if (homeScore > awayScore) {
+    return "home";
+  }
+
+  if (awayScore > homeScore) {
+    return "away";
+  }
+
+  return "tie";
+}
+
+
+
+

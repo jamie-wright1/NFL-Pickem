@@ -8,6 +8,7 @@ import '../page.css';
 import { auth } from "@/auth";
 import { fetchButtonPicked } from "../../../lib/data";
 import { isGameClosed } from "../../../lib/utils";
+import Image from "next/image";
 
 type GameDetailPageProps = {
     params?: Promise<{
@@ -44,7 +45,7 @@ export default async function Index({ params }: GameDetailPageProps) {
 
     return (
         <main className="game-page">
-            <Link className="return-link bg-blue-500 text-white p-2 rounded" href={`/ui/week/${game.week}`}>Return</Link>
+            <Link className="return-link" href={`/ui/week/${game.week}`}><Image src="/Icons/Home.png" alt="Home" layout="fill"/></Link>
             <div className="game-info">
                 <h1 id="away-team">{game.away_team}</h1>
                 <h1 id="at">@</h1>

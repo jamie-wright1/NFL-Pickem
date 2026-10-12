@@ -7,7 +7,8 @@ import { isGameClosed } from "../../lib/utils";
 import clsx from "clsx";
 
 
-export default function GameBox ({ game_id, away_team, away_score, home_team, home_score, is_scored, week, date, time, picks, requestingPlayer, activeWeek }: GameRowsProps) {
+
+export default function GameBox ({ game_id, away_team, away_score, away_record, home_team, home_score, home_record, is_scored, away_odds, home_odds, week, date, time, picks, requestingPlayer, activeWeek }: GameRowsProps) {
   const userPick =
     picks?.find((pick) => pick.player === requestingPlayer) ?? null; // Get the user's pick if available, otherwise null
 
@@ -51,9 +52,9 @@ export default function GameBox ({ game_id, away_team, away_score, home_team, ho
     return <div className = {className}>
               <div className = "game-info">
                 <Link href={`/ui/game/${game_id}`}>
-                  <h2 className="away-team">{away_team}</h2>
+                  <h2 className="away-team">{away_team} ({away_record})</h2>
                   <h2 className="at">@</h2>
-                  <h2 className="home-team">{home_team}</h2>
+                  <h2 className="home-team">{home_team} ({home_record})</h2>
                 </Link>
               </div>
               <div className = "pick-screen">
@@ -69,6 +70,7 @@ export default function GameBox ({ game_id, away_team, away_score, home_team, ho
                     isHomeTeam={false}
                     buttonPicked={userPick?.picked === "away"}
                     isLocked={isLocked}
+                    odds={away_odds}
                   />
                   <div className="img-box">
                     <TeamImage team={away_team} />
@@ -92,6 +94,7 @@ export default function GameBox ({ game_id, away_team, away_score, home_team, ho
                     isHomeTeam={true}
                     buttonPicked={userPick?.picked === "home"}
                     isLocked={isLocked}
+                    odds={home_odds}
                   />
                 </div>
               </div>
