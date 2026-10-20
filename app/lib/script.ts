@@ -6,6 +6,9 @@ const sql = postgres(process.env.POSTGRES_URL!, {
 });
 
 export async function populateOdds() {
+    let updated = 0;
+    let skipped = 0;
+
     for (let week = 1; week <= 18; week++) {
         const response = await fetch('https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/types/2/weeks/' + week.toString() + '/events');
         const items = await response.json();
@@ -22,22 +25,20 @@ export async function populateOdds() {
 
             if (!Number.isInteger(awayOdds) || !Number.isInteger(homeOdds)) {
                 console.warn(`Skipping event ${eventDetails.id}: moneyline odds are unavailable`);
+                skipped++;
                 continue;
             }
 
-            await sql`
+            const result = await sql`
                 UPDATE games
                 SET away_odds = ${awayOdds},
                     home_odds = ${homeOdds}
                 WHERE game_id = ${eventDetails.id}
+                  AND is_scored IS NOT TRUE
             `;
+            updated += result.count;
         }
     }
-}
 
-populateOdds()
-    .catch((error) => {
-        console.error("Failed to populate odds:", error);
-        process.exitCode = 1;
-    })
-    .finally(() => sql.end());
+    return { updated, skipped };
+}

@@ -77,8 +77,8 @@ export async function FetchGames(week: number) {
       date,
       time,
       is_scored: event.status.type.completed,
-      away_odds: oddsData["items"][0]["awayTeamOdds"],
-      home_odds: oddsData["items"][0]["homeTeamOdds"],
+      away_odds: awayOdds,
+      home_odds: homeOdds,
     });
   }
 

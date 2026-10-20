@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import runScoring from "@/app/lib/scoring";
 import { updateTeamRecordsFromAPI } from "@/app/lib/actions";
-
+import { populateOdds } from "@/app/lib/script";
 
 export async function GET(request: NextRequest) {
   const authorization = request.headers.get("authorization");
@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await runScoring();
-  const recordsResult = await updateTeamRecordsFromAPI();
+  await updateTeamRecordsFromAPI();
+  const oddsResult = await populateOdds();
 
-  return NextResponse.json(result);
-
+  return NextResponse.json({ ...result, odds: oddsResult });
 }
